@@ -69,6 +69,33 @@ official actions assembled from two different BEOE feeds — complaints AND
 news notices — each with a date, action badge, and link to the original
 government notice. That page is the product pitch in one screenshot.
 
+## Hardening round ("make it perfect", 2026-06-13)
+
+**What was built:** a 27-test pytest suite encoding every documented title
+format; a measured accuracy number (100 random merge decisions hand-reviewed:
+100% auto-merge precision, 99% overall); an incremental `scraper/sync.py`;
+deploy config (`render.yaml` + gunicorn); the 0.9 MB sample DB committed so
+cloners run the site with zero setup.
+
+**What the data taught us this round:**
+1. The site also writes "OEP No." (missing the L) — regex widened, test added.
+2. "Suspension of Licence" is a distinct serious action hiding in the
+   "other" bucket — added to the taxonomy, badges, and status tiers.
+3. Complainants type junk into the official form: one entered the licence
+   number "4584" as the agency *name*. New resolver rule: a digits-only name
+   matching exactly one licence is an unambiguous identity — it correctly
+   linked that complaint to Suhaib & Associates (4584's real holder).
+4. The one honest failure (the 1% in the accuracy number): a form entry of
+   just "sufyan" scored 44 against the real "Sufyan Recruiting Agency" —
+   below every threshold, so a junk record was created. Source garbage is
+   the limit of name matching; thresholds prevented a false merge.
+5. Found one normalized-name collision in the register (two "Talagang
+   International" licences) — documented as a known limitation.
+
+**A test caught my own bug:** the ambiguous-digits test failed because the
+fake ID factory in the *test fixture* collided with manually registered IDs.
+Even test code needs review.
+
 **Interview stories captured so far:**
 1. *Polite scraping:* robots.txt check first, honest UA with contact email,
    3-5 s delays, cache-first so no page is fetched twice, resumable batches,

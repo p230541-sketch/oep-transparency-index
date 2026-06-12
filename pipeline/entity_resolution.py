@@ -87,6 +87,17 @@ class Resolver:
             self.register(agency_id, name, oepl)
             return agency_id
 
+        # Rule 1b: some complaint forms put the licence NUMBER in the name
+        # field ("4584"). If exactly one known agency has those digits,
+        # that's an unambiguous identity.
+        if re.fullmatch(r"\d{1,4}", name.strip()):
+            digits = f"{int(name):04d}"
+            hits = [aid for known, aid in self.by_oepl.items()
+                    if known.split("/")[0] == digits]
+            if len(hits) == 1:
+                self.merge_log.append((name, digits, 100.0, "oepl_digits_match"))
+                return hits[0]
+
         # Rule 2: fuzzy name matching.
         agency_id, matched, score = self.best_name_match(name)
         if agency_id is not None and score >= AUTO_MERGE_SCORE:

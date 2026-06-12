@@ -19,6 +19,8 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, PROJECT_ROOT)
 DB_PATH = os.path.join(PROJECT_ROOT, "data", "db.sqlite3")
 
+from pipeline.entity_resolution import normalize_name
+
 app = Flask(__name__)
 
 ACTION_LABELS = {
@@ -27,10 +29,23 @@ ACTION_LABELS = {
     "show_cause": ("Show-cause notice", "badge-warn"),
     "warning": ("Warning issued", "badge-warn"),
     "personal_hearing": ("Personal hearing", "badge-warn"),
+    "suspension": ("Licence suspended", "badge-black"),
     "blacklisting": ("Blacklisting", "badge-black"),
     "restoration": ("License restored", "badge-restore"),
     "other": ("Official notice", "badge-other"),
 }
+
+
+@app.before_request
+def require_database():
+    """Friendly setup message instead of a 500 when the DB hasn't been built."""
+    if not os.path.exists(DB_PATH):
+        return (
+            "<h1>Database not built yet</h1>"
+            "<p>Run <code>python pipeline/build_db.py</code> from the project "
+            "root first (see README), then reload this page.</p>", 503,
+        )
+    return None
 
 
 def get_db():
@@ -75,13 +90,17 @@ def status_tier(agency_id: int) -> tuple[str, str]:
         return "No official actions on record", "tier-none"
 
     types = [r["notice_type"] for r in rows]
-    last_blacklist = max((r["date_published"] or "" for r in rows
-                          if r["notice_type"] == "blacklisting"), default=None)
-    last_restore = max((r["date_published"] or "" for r in rows
-                        if r["notice_type"] == "restoration"), default=None)
-    if last_blacklist is not None and (last_restore is None
-                                       or last_restore < last_blacklist):
-        return "Currently blacklisted", "tier-black"
+
+    def last_of(notice_type):
+        return max((r["date_published"] or "" for r in rows
+                    if r["notice_type"] == notice_type), default=None)
+
+    last_restore = last_of("restoration")
+    for serious, label in (("blacklisting", "Currently blacklisted"),
+                           ("suspension", "Licence suspended (per BEOE notice)")):
+        last = last_of(serious)
+        if last is not None and (last_restore is None or last_restore < last):
+            return label, "tier-black"
 
     opened = types.count("complaint_opened")
     closed = types.count("complaint_closed")
@@ -123,7 +142,10 @@ def search():
             (oepl_like,),
         ).fetchall()
     else:
+        # Variants are stored normalized (lowercase, no M/s, no punctuation),
+        # so normalize the query for that column; raw LIKE for canonical names.
         like = f"%{q}%"
+        norm_like = f"%{normalize_name(q)}%"
         rows = db.execute(
             """SELECT a.*, COUNT(DISTINCT na.notice_id) AS action_count
                FROM agencies a
@@ -132,7 +154,7 @@ def search():
                WHERE a.canonical_name LIKE ? OR v.variant_text LIKE ?
                GROUP BY a.agency_id ORDER BY action_count DESC,
                         a.canonical_name LIMIT 50""",
-            (like, like),
+            (like, norm_like),
         ).fetchall()
 
     agencies = [dict(r) | {"tier": status_tier(r["agency_id"])} for r in rows]

@@ -1,0 +1,16 @@
+# render.yaml — one-click deploy configuration for https://render.com
+#
+# How to deploy:
+#   1. Push this repo to GitHub
+#   2. On render.com: New + > Blueprint > pick the repo > Apply
+# Render reads this file, installs requirements, and starts the app with
+# gunicorn (a production-grade web server; Flask's built-in server is for
+# development only). The committed sample database ships with the deploy.
+
+services:
+  - type: web
+    name: oep-transparency-index
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn webapp.app:app

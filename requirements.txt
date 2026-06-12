@@ -2,3 +2,5 @@ requests>=2.31
 beautifulsoup4>=4.12
 flask>=3.0
 rapidfuzz>=3.6
+gunicorn>=21.0   # production server for deployment (Linux hosts)
+pytest>=8.0      # test suite: python -m pytest

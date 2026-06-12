@@ -23,8 +23,9 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # ---------------------------------------------------------------------------
 
 # Matches "OEPL No. 1234/RWP", "OEPL No.1234/RWP", "(OEPL No. 0848/LHR)",
-# and even "OEPL No.3768./RWP" (stray period before the slash — seen live).
-OEPL_RE = re.compile(r"OEPL\s*No\.?\s*(\d{1,4})\s*\.?\s*/\s*([A-Za-z]{2,5})", re.IGNORECASE)
+# "OEP No.1788/RWP" (missing L — seen live), and "OEPL No.3768./RWP"
+# (stray period before the slash — also seen live).
+OEPL_RE = re.compile(r"OEPL?\s*No\.?\s*(\d{1,4})\s*\.?\s*/\s*([A-Za-z]{2,5})", re.IGNORECASE)
 
 # Matches an agency-name mention: "M/s Foo Bar" or "M/s. Foo Bar"
 MS_RE = re.compile(r"M/s\.?\s*", re.IGNORECASE)
@@ -59,6 +60,8 @@ def classify_title(title: str) -> str:
         return "warning"
     if "personal hearing" in t:
         return "personal_hearing"
+    if "suspension" in t or "suspended" in t:
+        return "suspension"
     if "blacklist" in t:
         return "blacklisting"
     if "restoration" in t or "restored" in t:
@@ -190,8 +193,8 @@ def parse_complaint_page(html: str, url: str) -> dict:
                 "agencies": [],
                 "extra_fields": fields,
             }
-        # Strip the M/s. prefix and stray trailing punctuation
-        oep_name = MS_RE.sub("", oep_name).strip().strip(",.").strip()
+        # Strip the M/s. prefix and stray punctuation (": Al- Ain", "Foo,")
+        oep_name = MS_RE.sub("", oep_name).strip(" \t:,.").strip()
         title = f"Complaint against M/s {oep_name} — status: {status_display}"
 
         return {
