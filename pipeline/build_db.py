@@ -16,7 +16,6 @@
 import csv
 import glob
 import os
-import re
 import sqlite3
 import sys
 from datetime import datetime
@@ -96,8 +95,7 @@ def main():
 
     resolver = Resolver()
 
-    def create_agency(name, oepl, status=None, address=None, phone=None,
-                      proprietor=None):
+    def create_agency(name, oepl, status=None, address=None, phone=None):
         region = oepl.split("/")[1] if oepl else None
         cur = con.execute(
             """INSERT INTO agencies
@@ -128,9 +126,11 @@ def main():
     unparsed = []
     n_total = n_ok = 0
 
-    notice_files = sorted(
-        glob.glob(os.path.join(RAW_DIR, "news-updates_*.html"))
-        + glob.glob(os.path.join(RAW_DIR, "complaints_results_*.html"))
+    # News notices first: their titles carry OEPL numbers, which register
+    # name variants that the number-less complaint pages can then exact-match.
+    notice_files = (
+        sorted(glob.glob(os.path.join(RAW_DIR, "news-updates_*.html")))
+        + sorted(glob.glob(os.path.join(RAW_DIR, "complaints_results_*.html")))
     )
 
     for path in notice_files:

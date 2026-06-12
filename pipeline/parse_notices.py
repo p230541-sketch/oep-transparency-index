@@ -22,8 +22,9 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # Shared helpers
 # ---------------------------------------------------------------------------
 
-# Matches "OEPL No. 1234/RWP", "OEPL No.1234/RWP", "(OEPL No. 0848/LHR)" etc.
-OEPL_RE = re.compile(r"OEPL\s*No\.?\s*(\d{1,4})\s*/\s*([A-Za-z]{2,5})", re.IGNORECASE)
+# Matches "OEPL No. 1234/RWP", "OEPL No.1234/RWP", "(OEPL No. 0848/LHR)",
+# and even "OEPL No.3768./RWP" (stray period before the slash — seen live).
+OEPL_RE = re.compile(r"OEPL\s*No\.?\s*(\d{1,4})\s*\.?\s*/\s*([A-Za-z]{2,5})", re.IGNORECASE)
 
 # Matches an agency-name mention: "M/s Foo Bar" or "M/s. Foo Bar"
 MS_RE = re.compile(r"M/s\.?\s*", re.IGNORECASE)
@@ -169,19 +170,28 @@ def parse_complaint_page(html: str, url: str) -> dict:
                 label, _, value = text.partition(":")
                 fields[label.strip().lower()] = value.strip()
 
-        oep_name = fields.get("oep name") or fields.get("licence title")
-        if not oep_name:
-            return {"ok": False, "reason": "no OEP name field"}
-        # Strip the M/s. prefix and stray trailing punctuation
-        oep_name = MS_RE.sub("", oep_name).strip().strip(",.").strip()
-
-        status = fields.get("complaint status", "").lower()
+        status_display = fields.get("complaint status", "unknown status")
+        status = status_display.lower()
         if any(w in status for w in ("closed", "disposed", "resolved", "decided")):
             notice_type = "complaint_closed"
         else:
             notice_type = "complaint_opened"
 
-        status_display = fields.get("complaint status", "unknown status")
+        oep_name = fields.get("oep name") or fields.get("licence title")
+        if not oep_name:
+            # "General Complaint" category: a complaint not directed at any
+            # OEP — a valid notice, just with no agency to link.
+            category = fields.get("category", "General")
+            return {
+                "ok": True,
+                "title": f"{category} — status: {status_display}",
+                "date": fields.get("added on"),
+                "notice_type": notice_type,
+                "agencies": [],
+                "extra_fields": fields,
+            }
+        # Strip the M/s. prefix and stray trailing punctuation
+        oep_name = MS_RE.sub("", oep_name).strip().strip(",.").strip()
         title = f"Complaint against M/s {oep_name} — status: {status_display}"
 
         return {
