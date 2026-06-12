@@ -1,0 +1,4 @@
+# Phase 0 dependencies only.
+# We add more packages (flask, rapidfuzz, etc.) in later phases.
+requests>=2.31
+beautifulsoup4>=4.12

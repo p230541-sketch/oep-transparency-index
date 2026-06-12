@@ -1,0 +1,15 @@
+# config.py.example
+#
+# Copy this file to config.py and fill in your details.
+# config.py is gitignored — it will never be committed.
+#
+# How to use: from config import CONTACT_EMAIL, USER_AGENT
+
+CONTACT_EMAIL = "your.email@example.com"
+
+# This User-Agent identifies your script to the server honestly.
+# It's the polite thing to do — like wearing a name tag.
+USER_AGENT = f"OEP-Transparency-Index (independent portfolio project; contact: {CONTACT_EMAIL})"
+
+# Where scraped HTML pages are saved locally
+RAW_HTML_DIR = "data/raw_html"
