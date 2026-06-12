@@ -1,0 +1,35 @@
+{# webapp/templates/agency.html — one agency's full official track record #}
+{% extends "base.html" %}
+{% block title %}{{ a.canonical_name }} — OEP Transparency Index{% endblock %}
+{% block content %}
+<div class="agency-card">
+  <h1>{{ a.canonical_name }}</h1>
+  <dl>
+    <div><dt>Licence No.</dt><dd>{{ a.oepl_number or "not on record" }}</dd></div>
+    <div><dt>Region</dt><dd>{{ a.region_code or "—" }}</dd></div>
+    <div><dt>Licence status</dt><dd>{{ a.license_status or "—" }}</dd></div>
+    {% if a.address %}<div><dt>Address</dt><dd>{{ a.address }}</dd></div>{% endif %}
+  </dl>
+  <p><span class="tier {{ tier[1] }}">{{ tier[0] }}</span></p>
+</div>
+
+<h2>Official track record <span class="source-tag">(source: BEOE)</span></h2>
+
+{% if notices %}
+<ol class="timeline">
+  {% for n in notices %}
+  <li>
+    <span class="date">{{ n.date_published or "date n/a" }}</span>
+    {% set label = action_labels.get(n.notice_type, action_labels["other"]) %}
+    <span class="badge {{ label[1] }}">{{ label[0] }}</span>
+    <span class="notice-title">{{ n.title_raw }}</span>
+    <a class="source-link" href="{{ n.beoe_url }}" rel="noopener">View official notice &rarr;</a>
+  </li>
+  {% endfor %}
+</ol>
+{% else %}
+<p class="empty">No official actions on record for this agency in our database.
+   This covers only the notice ranges scraped so far — always verify at
+   <a href="https://beoe.gov.pk">beoe.gov.pk</a>.</p>
+{% endif %}
+{% endblock %}

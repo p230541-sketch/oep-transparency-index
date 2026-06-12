@@ -1,0 +1,42 @@
+{# webapp/templates/stats.html — aggregate statistics with CSS bar charts #}
+{% extends "base.html" %}
+{% block title %}Statistics — OEP Transparency Index{% endblock %}
+{% block content %}
+<h1>Statistics</h1>
+<p class="lede">Aggregates computed from official BEOE notices in our database.
+   Coverage reflects the notice ID ranges scraped so far, not all-time history.</p>
+
+<section class="chart">
+  <h2>Actions by type</h2>
+  {% for r in by_type %}
+  {% set label = action_labels.get(r.notice_type, action_labels["other"]) %}
+  <div class="bar-row">
+    <span class="bar-label">{{ label[0] }}</span>
+    <span class="bar" style="width: {{ r.pct }}%"></span>
+    <span class="bar-value">{{ r.n }}</span>
+  </div>
+  {% endfor %}
+</section>
+
+<section class="chart">
+  <h2>Actions by year</h2>
+  {% for r in by_year %}
+  <div class="bar-row">
+    <span class="bar-label">{{ r.year }}</span>
+    <span class="bar" style="width: {{ r.pct }}%"></span>
+    <span class="bar-value">{{ r.n }}</span>
+  </div>
+  {% endfor %}
+</section>
+
+<section class="chart">
+  <h2>Actions by Protectorate region</h2>
+  {% for r in by_region %}
+  <div class="bar-row">
+    <span class="bar-label">{{ r.region_code }}</span>
+    <span class="bar" style="width: {{ r.pct }}%"></span>
+    <span class="bar-value">{{ r.n }}</span>
+  </div>
+  {% endfor %}
+</section>
+{% endblock %}

@@ -15,6 +15,9 @@ data/raw_html/
 # SQLite database (the sample db will be un-ignored later)
 *.sqlite3
 
+# Generated pipeline outputs (rebuilt by build_db.py)
+data/*.csv
+
 # IDE
 .vscode/
 .idea/

@@ -1,0 +1,155 @@
+/* webapp/static/style.css — plain CSS, no frameworks.
+   Design: readable on cheap phones, high contrast, no JS. */
+
+:root {
+  --green: #0e6b3d;
+  --green-dark: #0a5230;
+  --ink: #1d2520;
+  --muted: #5b6660;
+  --paper: #f7f6f2;
+  --card: #ffffff;
+  --line: #dcdcd4;
+  --red: #b3261e;
+  --amber: #9a6700;
+  --blue: #1156a5;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.55;
+}
+
+main { max-width: 880px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+/* ---------- header / footer ---------- */
+.site-header {
+  background: var(--green);
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.7rem 1.2rem;
+}
+.site-header .brand {
+  color: #fff; text-decoration: none; font-weight: bold; font-size: 1.15rem;
+  letter-spacing: 0.02em;
+}
+.site-header nav a {
+  color: #d8eadf; text-decoration: none; margin-left: 1.2rem;
+  font-family: Verdana, sans-serif; font-size: 0.85rem;
+}
+.site-header nav a:hover { color: #fff; text-decoration: underline; }
+
+.site-footer {
+  border-top: 3px solid var(--green);
+  background: #ecebe5;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-family: Verdana, sans-serif;
+  padding: 1rem 1.2rem 1.4rem;
+  margin-top: 2rem;
+}
+.site-footer a { color: var(--green-dark); }
+.site-footer .synced { font-weight: bold; }
+
+/* ---------- home ---------- */
+.hero h1 { font-size: 1.7rem; margin-bottom: 0.4rem; }
+.lede { color: var(--muted); max-width: 60ch; }
+
+.search-form { display: flex; gap: 0.5rem; margin: 1.4rem 0 0.6rem; }
+.search-form input {
+  flex: 1; padding: 0.8rem 1rem; font-size: 1rem;
+  border: 2px solid var(--green); border-radius: 4px;
+  font-family: Verdana, sans-serif;
+}
+.search-form button {
+  padding: 0.8rem 1.6rem; font-size: 1rem; font-weight: bold;
+  background: var(--green); color: #fff; border: 0; border-radius: 4px;
+  cursor: pointer;
+}
+.search-form button:hover { background: var(--green-dark); }
+.search-form.compact { margin: 0.8rem 0 1.6rem; max-width: 540px; }
+
+.db-stats { font-family: Verdana, sans-serif; font-size: 0.85rem; color: var(--muted); }
+
+.explainer { margin-top: 2.2rem; border-top: 1px solid var(--line); padding-top: 1rem; }
+.explainer ol { max-width: 60ch; }
+
+/* ---------- results table ---------- */
+.results-table {
+  width: 100%; border-collapse: collapse; background: var(--card);
+  font-family: Verdana, sans-serif; font-size: 0.85rem;
+}
+.results-table th, .results-table td {
+  text-align: left; padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--line);
+}
+.results-table th { background: #e7ece8; font-size: 0.78rem; text-transform: uppercase; }
+.results-table .num { text-align: center; font-weight: bold; }
+.results-table a { color: var(--green-dark); }
+
+/* ---------- status tiers ---------- */
+.tier {
+  display: inline-block; padding: 0.15rem 0.6rem; border-radius: 999px;
+  font-family: Verdana, sans-serif; font-size: 0.72rem; font-weight: bold;
+  white-space: nowrap;
+}
+.tier-none   { background: #e2efe7; color: var(--green-dark); }
+.tier-past   { background: #e8e8e0; color: var(--muted); }
+.tier-open   { background: #fdf0d3; color: var(--amber); }
+.tier-black  { background: #fadbd9; color: var(--red); }
+
+/* ---------- agency profile ---------- */
+.agency-card {
+  background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--green);
+  border-radius: 4px; padding: 1rem 1.3rem; margin-bottom: 1.6rem;
+}
+.agency-card h1 { margin: 0 0 0.6rem; font-size: 1.45rem; }
+.agency-card dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                  gap: 0.4rem 1.4rem; margin: 0 0 0.7rem; }
+.agency-card dt { font-family: Verdana, sans-serif; font-size: 0.7rem;
+                  text-transform: uppercase; color: var(--muted); }
+.agency-card dd { margin: 0; font-weight: bold; }
+
+.source-tag { font-size: 0.8rem; color: var(--muted); font-weight: normal; }
+
+/* ---------- timeline ---------- */
+.timeline { list-style: none; padding: 0; margin: 0; }
+.timeline li {
+  background: var(--card); border: 1px solid var(--line); border-radius: 4px;
+  padding: 0.7rem 1rem; margin-bottom: 0.6rem;
+  display: flex; flex-wrap: wrap; gap: 0.5rem 0.9rem; align-items: baseline;
+}
+.timeline .date { font-family: Verdana, sans-serif; font-size: 0.78rem;
+                  color: var(--muted); min-width: 84px; }
+.timeline .notice-title { flex: 1 1 100%; }
+.timeline .source-link {
+  font-family: Verdana, sans-serif; font-size: 0.78rem; color: var(--blue);
+  margin-left: auto;
+}
+
+.badge {
+  display: inline-block; padding: 0.1rem 0.55rem; border-radius: 3px;
+  font-family: Verdana, sans-serif; font-size: 0.72rem; font-weight: bold;
+  color: #fff;
+}
+.badge-open    { background: var(--amber); }
+.badge-closed  { background: #5b8a6f; }
+.badge-warn    { background: #b3681e; }
+.badge-black   { background: var(--red); }
+.badge-restore { background: var(--blue); }
+.badge-other   { background: #6b6b6b; }
+
+/* ---------- stats bars ---------- */
+.chart { margin: 1.8rem 0; }
+.bar-row { display: flex; align-items: center; gap: 0.7rem; margin: 0.3rem 0;
+           font-family: Verdana, sans-serif; font-size: 0.82rem; }
+.bar-label { min-width: 150px; text-align: right; }
+.bar { background: var(--green); height: 1.05rem; border-radius: 2px; min-width: 2px; }
+.bar-value { font-weight: bold; }
+
+.empty { color: var(--muted); }

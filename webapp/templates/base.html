@@ -1,0 +1,35 @@
+<!doctype html>
+<!-- webapp/templates/base.html — shared layout: header, search bar, footer disclaimer -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}OEP Transparency Index{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="{{ url_for('home') }}">OEP&nbsp;Transparency&nbsp;Index</a>
+    <nav>
+      <a href="{{ url_for('home') }}">Search</a>
+      <a href="{{ url_for('stats') }}">Statistics</a>
+    </nav>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <p>
+      Independent open-data project. All records are republished from public notices of the
+      Bureau of Emigration &amp; Overseas Employment
+      (<a href="https://beoe.gov.pk" rel="noopener">beoe.gov.pk</a>), Government of Pakistan,
+      and every record links to its original source. This site adds no allegations of its own.
+      For authoritative verification, consult beoe.gov.pk or your nearest Protectorate of
+      Emigrants office.
+    </p>
+    <p class="synced">Data last synced: {{ last_synced }}</p>
+  </footer>
+</body>
+</html>

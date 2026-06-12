@@ -1,0 +1,8 @@
+{# webapp/templates/404.html — agency not found #}
+{% extends "base.html" %}
+{% block title %}Not found — OEP Transparency Index{% endblock %}
+{% block content %}
+<h1>Agency not found</h1>
+<p>No agency with that ID exists in our database.
+   <a href="{{ url_for('home') }}">Back to search</a>.</p>
+{% endblock %}

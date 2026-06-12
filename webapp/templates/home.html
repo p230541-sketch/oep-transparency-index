@@ -1,0 +1,31 @@
+{# webapp/templates/home.html — landing page with the search box #}
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <h1>Check a recruitment agency's official record before you pay them.</h1>
+  <p class="lede">
+    Pakistan's Bureau of Emigration &amp; Overseas Employment publishes every complaint,
+    warning, and blacklisting against licensed overseas employment promoters (OEPs) —
+    but only as a news feed nobody can search. This site re-indexes those official
+    notices so you can look up one agency and see its complete track record.
+  </p>
+
+  <form class="search-form" action="{{ url_for('search') }}" method="get">
+    <input type="text" name="q" placeholder="Agency name or licence number (e.g. Shandur or 2974/PWR)"
+           autofocus required>
+    <button type="submit">Search</button>
+  </form>
+
+  <p class="db-stats">{{ "{:,}".format(n_agencies) }} agencies &middot;
+     {{ "{:,}".format(n_notices) }} official notices on record</p>
+</section>
+
+<section class="explainer">
+  <h2>How it works</h2>
+  <ol>
+    <li>Type the agency's name or its OEPL licence number.</li>
+    <li>Open the agency's profile to see every official action, newest first.</li>
+    <li>Every entry links to the original notice on beoe.gov.pk — verify everything yourself.</li>
+  </ol>
+</section>
+{% endblock %}
