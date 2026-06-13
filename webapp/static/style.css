@@ -123,14 +123,7 @@ a:hover { color: var(--green-deep); }
 }
 .masthead-nav a:hover { color: #fff; border-bottom-color: #c9b97a; }
 
-/* gazette double rule under the masthead */
-.masthead-rule {
-  height: 7px;
-  background:
-    linear-gradient(#c9b97a, #c9b97a) top / 100% 2px no-repeat,
-    linear-gradient(#c9b97a, #c9b97a) bottom / 100% 1px no-repeat,
-    var(--green-deep);
-}
+
 
 /* ---------- entrance motion (CSS only) ---------- */
 @keyframes rise {
@@ -229,8 +222,6 @@ a:hover { color: var(--green-deep); }
   font-family: var(--serif);
   font-size: 1.35rem; font-weight: 600;
   margin: 0 0 1rem;
-  padding-top: 0.9rem;
-  border-top: 4px double var(--rule-dark);
   display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.7rem;
 }
 .step-list {
@@ -522,13 +513,6 @@ a:hover { color: var(--green-deep); }
   max-width: 60rem;
   margin: 0 auto;
   padding: 0 var(--pad) 2rem;
-}
-.footer-rule {
-  height: 8px;
-  background:
-    linear-gradient(var(--rule-dark), var(--rule-dark)) top / 100% 1px no-repeat,
-    linear-gradient(var(--rule-dark), var(--rule-dark)) bottom / 100% 3px no-repeat;
-  margin-bottom: 1.2rem;
 }
 .footer-disclaimer {
   font-size: 0.84rem;
