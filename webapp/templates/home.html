@@ -2,18 +2,18 @@
 {% extends "base.html" %}
 {% block content %}
 <section class="hero">
-  <p class="hero-kicker reveal">Before you pay a recruitment agent &mdash;</p>
+  <p class="hero-kicker reveal">Before you pay a recruitment agent</p>
   <h1 class="hero-title reveal d1">Check the agency&rsquo;s <em>official</em> record.</h1>
   <p class="hero-lede reveal d2">
     Pakistan&rsquo;s Bureau of Emigration publishes every complaint, warning, suspension and
-    blacklisting against licensed overseas employment promoters &mdash; but only as a news feed
+    blacklisting against licensed overseas employment promoters, but only as a news feed
     nobody can search. This register re-indexes those official notices, agency by agency.
   </p>
 
   <form class="search-form reveal d3" action="{{ url_for('search') }}" method="get" role="search">
     <label class="visually-hidden" for="q">Agency name or licence number</label>
     <input id="q" type="text" name="q" autofocus required
-           placeholder="Agency name or licence number &mdash; e.g. Shandur or 2974/PWR">
+           placeholder="Agency name or licence number, e.g. Shandur or 2974/PWR">
     <button type="submit">Search the register</button>
   </form>
 
@@ -35,7 +35,7 @@
     <li class="reveal d2">
       <span class="step-num" aria-hidden="true">2</span>
       <h3>Read the record</h3>
-      <p>See every official action &mdash; complaints, warnings, suspensions, blacklistings &mdash; newest first.</p>
+      <p>See every official action: complaints, warnings, suspensions and blacklistings, newest first.</p>
     </li>
     <li class="reveal d3">
       <span class="step-num" aria-hidden="true">3</span>

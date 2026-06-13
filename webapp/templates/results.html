@@ -1,6 +1,6 @@
 {# webapp/templates/results.html — search results as a registry table #}
 {% extends "base.html" %}
-{% block title %}Search: {{ q }} — OEP Transparency Index{% endblock %}
+{% block title %}Search: {{ q }} | OEP Transparency Index{% endblock %}
 {% block content %}
 <section class="page-head">
   <p class="page-kicker">Register search</p>
@@ -33,9 +33,9 @@
         <td class="cell-name">
           <a href="{{ url_for('agency', agency_id=a.agency_id) }}">{{ a.canonical_name }}</a>
         </td>
-        <td class="cell-mono">{{ a.oepl_number or "—" }}</td>
-        <td>{{ a.region_code or "—" }}</td>
-        <td>{{ a.license_status or "—" }}</td>
+        <td class="cell-mono">{{ a.oepl_number or "n/a" }}</td>
+        <td>{{ a.region_code or "n/a" }}</td>
+        <td>{{ a.license_status or "n/a" }}</td>
         <td class="num">{{ a.action_count }}</td>
         <td><span class="tier {{ a.tier[1] }}">{{ a.tier[0] }}</span></td>
       </tr>
