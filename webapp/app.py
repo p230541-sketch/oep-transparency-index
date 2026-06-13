@@ -50,7 +50,7 @@ def require_database():
 
 def get_db():
     if "db" not in g:
-        g.db = sqlite3.connect(DB_PATH)
+        g.db = sqlite3.connect(f"file:{DB_PATH}?mode=ro", uri=True)
         g.db.row_factory = sqlite3.Row
     return g.db
 
