@@ -1,42 +1,51 @@
-{# webapp/templates/stats.html — aggregate statistics with CSS bar charts #}
+{# webapp/templates/stats.html — ruled bar charts, CSS only #}
 {% extends "base.html" %}
 {% block title %}Statistics — OEP Transparency Index{% endblock %}
 {% block content %}
-<h1>Statistics</h1>
-<p class="lede">Aggregates computed from official BEOE notices in our database.
-   Coverage reflects the notice ID ranges scraped so far, not all-time history.</p>
+<section class="page-head">
+  <p class="page-kicker">Aggregate view</p>
+  <h1 class="page-title">Statistics</h1>
+  <p class="page-lede">Computed from official BEOE notices in this register.
+     Coverage reflects the notice ranges scraped so far, not all-time history.</p>
+</section>
 
-<section class="chart">
-  <h2>Actions by type</h2>
+<section class="chart reveal d1">
+  <h2 class="section-heading">Actions by type</h2>
+  <div class="chart-body">
   {% for r in by_type %}
-  {% set label = action_labels.get(r.notice_type, action_labels["other"]) %}
-  <div class="bar-row">
-    <span class="bar-label">{{ label[0] }}</span>
-    <span class="bar" style="width: {{ r.pct }}%"></span>
-    <span class="bar-value">{{ r.n }}</span>
-  </div>
+    {% set label = action_labels.get(r.notice_type, action_labels["other"]) %}
+    <div class="bar-row">
+      <span class="bar-label">{{ label[0] }}</span>
+      <span class="bar-track"><span class="bar" style="width: {{ r.pct }}%"></span></span>
+      <span class="bar-value">{{ r.n }}</span>
+    </div>
   {% endfor %}
+  </div>
 </section>
 
-<section class="chart">
-  <h2>Actions by year</h2>
+<section class="chart reveal d2">
+  <h2 class="section-heading">Actions by year</h2>
+  <div class="chart-body">
   {% for r in by_year %}
-  <div class="bar-row">
-    <span class="bar-label">{{ r.year }}</span>
-    <span class="bar" style="width: {{ r.pct }}%"></span>
-    <span class="bar-value">{{ r.n }}</span>
-  </div>
+    <div class="bar-row">
+      <span class="bar-label">{{ r.year }}</span>
+      <span class="bar-track"><span class="bar" style="width: {{ r.pct }}%"></span></span>
+      <span class="bar-value">{{ r.n }}</span>
+    </div>
   {% endfor %}
+  </div>
 </section>
 
-<section class="chart">
-  <h2>Actions by Protectorate region</h2>
+<section class="chart reveal d3">
+  <h2 class="section-heading">Actions by Protectorate region</h2>
+  <div class="chart-body">
   {% for r in by_region %}
-  <div class="bar-row">
-    <span class="bar-label">{{ r.region_code }}</span>
-    <span class="bar" style="width: {{ r.pct }}%"></span>
-    <span class="bar-value">{{ r.n }}</span>
-  </div>
+    <div class="bar-row">
+      <span class="bar-label">{{ r.region_code }}</span>
+      <span class="bar-track"><span class="bar" style="width: {{ r.pct }}%"></span></span>
+      <span class="bar-value">{{ r.n }}</span>
+    </div>
   {% endfor %}
+  </div>
 </section>
 {% endblock %}

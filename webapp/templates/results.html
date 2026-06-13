@@ -1,35 +1,53 @@
-{# webapp/templates/results.html — search results list #}
+{# webapp/templates/results.html — search results as a registry table #}
 {% extends "base.html" %}
 {% block title %}Search: {{ q }} — OEP Transparency Index{% endblock %}
 {% block content %}
-<h1>Results for &ldquo;{{ q }}&rdquo;</h1>
+<section class="page-head">
+  <p class="page-kicker">Register search</p>
+  <h1 class="page-title">&ldquo;{{ q }}&rdquo;</h1>
 
-<form class="search-form compact" action="{{ url_for('search') }}" method="get">
-  <input type="text" name="q" value="{{ q }}">
-  <button type="submit">Search</button>
-</form>
+  <form class="search-form compact" action="{{ url_for('search') }}" method="get" role="search">
+    <label class="visually-hidden" for="q">Agency name or licence number</label>
+    <input id="q" type="text" name="q" value="{{ q }}">
+    <button type="submit">Search</button>
+  </form>
+</section>
 
 {% if agencies %}
-<table class="results-table">
-  <thead>
-    <tr><th>Agency</th><th>Licence No.</th><th>Region</th><th>Licence status</th>
-        <th>Official actions</th><th>Status</th></tr>
-  </thead>
-  <tbody>
-  {% for a in agencies %}
-    <tr>
-      <td><a href="{{ url_for('agency', agency_id=a.agency_id) }}">{{ a.canonical_name }}</a></td>
-      <td>{{ a.oepl_number or "—" }}</td>
-      <td>{{ a.region_code or "—" }}</td>
-      <td>{{ a.license_status or "—" }}</td>
-      <td class="num">{{ a.action_count }}</td>
-      <td><span class="tier {{ a.tier[1] }}">{{ a.tier[0] }}</span></td>
-    </tr>
-  {% endfor %}
-  </tbody>
-</table>
+<p class="result-count">{{ agencies|length }} match{{ "es" if agencies|length != 1 }} found</p>
+<div class="table-wrap">
+  <table class="registry-table">
+    <thead>
+      <tr>
+        <th scope="col">Agency</th>
+        <th scope="col">Licence&nbsp;No.</th>
+        <th scope="col">Region</th>
+        <th scope="col">Licence</th>
+        <th scope="col" class="num">Actions</th>
+        <th scope="col">Standing</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for a in agencies %}
+      <tr class="reveal" style="animation-delay: {{ loop.index0 * 40 }}ms">
+        <td class="cell-name">
+          <a href="{{ url_for('agency', agency_id=a.agency_id) }}">{{ a.canonical_name }}</a>
+        </td>
+        <td class="cell-mono">{{ a.oepl_number or "—" }}</td>
+        <td>{{ a.region_code or "—" }}</td>
+        <td>{{ a.license_status or "—" }}</td>
+        <td class="num">{{ a.action_count }}</td>
+        <td><span class="tier {{ a.tier[1] }}">{{ a.tier[0] }}</span></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% else %}
-<p class="empty">No agencies matched. Try fewer words, or the licence number
-   (e.g. <code>2974/PWR</code>).</p>
+<div class="empty-state">
+  <p class="empty-title">No agencies matched.</p>
+  <p>Try fewer words, a different spelling, or the licence number from your
+     documents (for example <code>2974/PWR</code>).</p>
+</div>
 {% endif %}
 {% endblock %}

@@ -1,31 +1,47 @@
-{# webapp/templates/home.html — landing page with the search box #}
+{# webapp/templates/home.html — landing page: hero search + how it works #}
 {% extends "base.html" %}
 {% block content %}
 <section class="hero">
-  <h1>Check a recruitment agency's official record before you pay them.</h1>
-  <p class="lede">
-    Pakistan's Bureau of Emigration &amp; Overseas Employment publishes every complaint,
-    warning, and blacklisting against licensed overseas employment promoters (OEPs) —
-    but only as a news feed nobody can search. This site re-indexes those official
-    notices so you can look up one agency and see its complete track record.
+  <p class="hero-kicker reveal">Before you pay a recruitment agent &mdash;</p>
+  <h1 class="hero-title reveal d1">Check the agency&rsquo;s <em>official</em> record.</h1>
+  <p class="hero-lede reveal d2">
+    Pakistan&rsquo;s Bureau of Emigration publishes every complaint, warning, suspension and
+    blacklisting against licensed overseas employment promoters &mdash; but only as a news feed
+    nobody can search. This register re-indexes those official notices, agency by agency.
   </p>
 
-  <form class="search-form" action="{{ url_for('search') }}" method="get">
-    <input type="text" name="q" placeholder="Agency name or licence number (e.g. Shandur or 2974/PWR)"
-           autofocus required>
-    <button type="submit">Search</button>
+  <form class="search-form reveal d3" action="{{ url_for('search') }}" method="get" role="search">
+    <label class="visually-hidden" for="q">Agency name or licence number</label>
+    <input id="q" type="text" name="q" autofocus required
+           placeholder="Agency name or licence number &mdash; e.g. Shandur or 2974/PWR">
+    <button type="submit">Search the register</button>
   </form>
 
-  <p class="db-stats">{{ "{:,}".format(n_agencies) }} agencies &middot;
-     {{ "{:,}".format(n_notices) }} official notices on record</p>
+  <p class="hero-stats reveal d4">
+    <strong>{{ "{:,}".format(n_agencies) }}</strong> licensed agencies &nbsp;&middot;&nbsp;
+    <strong>{{ "{:,}".format(n_notices) }}</strong> official notices &nbsp;&middot;&nbsp;
+    every record links to its government source
+  </p>
 </section>
 
-<section class="explainer">
-  <h2>How it works</h2>
-  <ol>
-    <li>Type the agency's name or its OEPL licence number.</li>
-    <li>Open the agency's profile to see every official action, newest first.</li>
-    <li>Every entry links to the original notice on beoe.gov.pk — verify everything yourself.</li>
+<section class="steps">
+  <h2 class="section-heading">How it works</h2>
+  <ol class="step-list">
+    <li class="reveal d1">
+      <span class="step-num" aria-hidden="true">1</span>
+      <h3>Search</h3>
+      <p>Type the agency&rsquo;s name or its OEPL licence number from your receipt or visa papers.</p>
+    </li>
+    <li class="reveal d2">
+      <span class="step-num" aria-hidden="true">2</span>
+      <h3>Read the record</h3>
+      <p>See every official action &mdash; complaints, warnings, suspensions, blacklistings &mdash; newest first.</p>
+    </li>
+    <li class="reveal d3">
+      <span class="step-num" aria-hidden="true">3</span>
+      <h3>Verify at the source</h3>
+      <p>Every entry links to the original notice on beoe.gov.pk. Trust the government page, not us.</p>
+    </li>
   </ol>
 </section>
 {% endblock %}
